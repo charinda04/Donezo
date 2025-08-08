@@ -1,5 +1,6 @@
 'use client'
 
+import { memo } from 'react'
 import { Task } from '@prisma/client'
 import { TaskItem } from './TaskItem'
 import { clsx } from 'clsx'
@@ -13,7 +14,7 @@ interface TaskListProps {
   emptyMessage?: string
 }
 
-export function TaskList({ 
+function TaskListComponent({ 
   tasks, 
   loading, 
   onToggleComplete, 
@@ -74,3 +75,5 @@ export function TaskList({
     </div>
   )
 }
+
+export const TaskList = memo(TaskListComponent)

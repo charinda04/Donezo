@@ -1,5 +1,6 @@
 'use client'
 
+import { useCallback, useMemo } from 'react'
 import { TaskForm } from '@/components/tasks/TaskForm'
 import { TaskList } from '@/components/tasks/TaskList'
 import { Modal } from '@/components/ui/Modal'
@@ -22,34 +23,34 @@ export function TaskManager({ filter = 'all' }: TaskManagerProps) {
   const deleteModal = useDeleteModal(tasks)
   const { getFilteredTasks } = useTaskStore()
   
-  const filteredTasks = getFilteredTasks(tasks)
+  const filteredTasks = useMemo(() => getFilteredTasks(tasks), [getFilteredTasks, tasks])
 
   // Event handlers
-  const handleCreateTask = (content: string, dueDate?: Date) => {
+  const handleCreateTask = useCallback((content: string, dueDate?: Date) => {
     mutations.createTask.mutate({ content, dueDate })
-  }
+  }, [mutations.createTask])
 
-  const handleUpdateTask = (taskId: string, content: string) => {
+  const handleUpdateTask = useCallback((taskId: string, content: string) => {
     mutations.updateTask.mutate({ taskId, content })
-  }
+  }, [mutations.updateTask])
 
-  const handleToggleComplete = (taskId: string) => {
+  const handleToggleComplete = useCallback((taskId: string) => {
     mutations.toggleComplete.mutate(taskId)
-  }
+  }, [mutations.toggleComplete])
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = useCallback(() => {
     if (deleteModal.deleteModalTaskId) {
       mutations.deleteTask.mutate(deleteModal.deleteModalTaskId)
     }
-  }
+  }, [deleteModal.deleteModalTaskId, mutations.deleteTask])
 
-  const getEmptyMessage = () => {
+  const emptyMessage = useMemo(() => {
     switch (filter) {
       case 'today': return EMPTY_MESSAGES.TODAY
       case 'completed': return EMPTY_MESSAGES.COMPLETED
       default: return EMPTY_MESSAGES.ALL
     }
-  }
+  }, [filter])
 
   return (
     <div className="space-y-6">
@@ -64,7 +65,7 @@ export function TaskManager({ filter = 'all' }: TaskManagerProps) {
         onToggleComplete={handleToggleComplete}
         onUpdate={handleUpdateTask}
         onDelete={deleteModal.handleDeleteClick}
-        emptyMessage={getEmptyMessage()}
+        emptyMessage={emptyMessage}
       />
 
       {/* Delete confirmation modal */}

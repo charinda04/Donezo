@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback, useMemo, memo } from 'react'
 import { Task } from '@prisma/client'
 import { Trash2, Edit } from 'lucide-react'
 import { clsx } from 'clsx'
@@ -12,32 +12,47 @@ interface TaskItemProps {
   onDelete: (taskId: string) => void
 }
 
-export function TaskItem({ task, onToggleComplete, onUpdate, onDelete }: TaskItemProps) {
+function TaskItemComponent({ task, onToggleComplete, onUpdate, onDelete }: TaskItemProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editContent, setEditContent] = useState(task.content)
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     if (editContent.trim() && editContent !== task.content) {
       onUpdate(task.id, editContent.trim())
     }
     setIsEditing(false)
-  }
+  }, [editContent, task.content, task.id, onUpdate])
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setEditContent(task.content)
     setIsEditing(false)
-  }
+  }, [task.content])
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       handleSave()
     } else if (e.key === 'Escape') {
       handleCancel()
     }
-  }
+  }, [handleSave, handleCancel])
 
-  const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && !task.completed
-  const isToday = task.dueDate && new Date(task.dueDate).toDateString() === new Date().toDateString()
+  const handleToggleClick = useCallback(() => {
+    onToggleComplete(task.id)
+  }, [onToggleComplete, task.id])
+
+  const handleEditClick = useCallback(() => {
+    setIsEditing(true)
+  }, [])
+
+  const handleDeleteClick = useCallback(() => {
+    onDelete(task.id)
+  }, [onDelete, task.id])
+
+  const { isOverdue, isToday } = useMemo(() => {
+    const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && !task.completed
+    const isToday = task.dueDate && new Date(task.dueDate).toDateString() === new Date().toDateString()
+    return { isOverdue, isToday }
+  }, [task.dueDate, task.completed])
 
   return (
     <div 
@@ -57,7 +72,7 @@ export function TaskItem({ task, onToggleComplete, onUpdate, onDelete }: TaskIte
     >
       {/* Custom Checkbox */}
       <button
-        onClick={() => onToggleComplete(task.id)}
+        onClick={handleToggleClick}
         className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
         style={{
           borderColor: task.completed ? 'var(--todoist-completed)' : 'var(--todoist-border)',
@@ -92,7 +107,7 @@ export function TaskItem({ task, onToggleComplete, onUpdate, onDelete }: TaskIte
             style={{ 
               color: task.completed ? 'var(--todoist-completed)' : 'var(--todoist-text)' 
             }}
-            onClick={() => setIsEditing(true)}
+            onClick={handleEditClick}
           >
             {task.content}
           </div>
@@ -118,14 +133,14 @@ export function TaskItem({ task, onToggleComplete, onUpdate, onDelete }: TaskIte
 
       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
-          onClick={() => setIsEditing(true)}
+          onClick={handleEditClick}
           className="p-1.5 rounded-md hover:bg-gray-100 transition-colors"
         >
           <Edit className="h-3.5 w-3.5" style={{ color: 'var(--todoist-text-muted)' }} />
         </button>
         
         <button
-          onClick={() => onDelete(task.id)}
+          onClick={handleDeleteClick}
           className="p-1.5 rounded-md hover:bg-red-50 transition-colors"
         >
           <Trash2 className="h-3.5 w-3.5" style={{ color: 'var(--todoist-text-muted)' }} />
@@ -134,3 +149,5 @@ export function TaskItem({ task, onToggleComplete, onUpdate, onDelete }: TaskIte
     </div>
   )
 }
+
+export const TaskItem = memo(TaskItemComponent)
