@@ -1,12 +1,12 @@
 import { NextAuthOptions } from 'next-auth'
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import { prisma } from './prisma'
 import bcrypt from 'bcryptjs'
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // Remove adapter for better performance - using JWT only
+  // adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
       name: 'credentials',
@@ -53,6 +53,10 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 1 day
+  },
+  jwt: {
+    maxAge: 24 * 60 * 60, // 1 day
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -66,6 +70,11 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.id as string
       }
       return session
+    },
+    async redirect({ url, baseUrl }) {
+      // Fast redirect - minimal processing
+      if (url.startsWith("/")) return `${baseUrl}${url}`
+      return baseUrl
     },
   },
   pages: {

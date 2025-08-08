@@ -7,7 +7,13 @@ export function Header() {
   const { data: session } = useSession()
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: '/auth/signin' })
+    signOut({ 
+      callbackUrl: '/auth/signin',
+      redirect: false 
+    }).then(() => {
+      // Force immediate redirect
+      window.location.href = '/auth/signin'
+    })
   }
 
   return (

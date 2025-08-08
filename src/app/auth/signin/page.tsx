@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn, getSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -32,10 +32,8 @@ export default function SignIn() {
       if (result?.error) {
         setError('Invalid email or password')
       } else {
-        // Refresh session and redirect
-        await getSession()
+        // Direct redirect without extra calls
         router.push('/')
-        router.refresh()
       }
     } catch {
       setError('An error occurred. Please try again.')
