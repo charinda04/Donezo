@@ -2,10 +2,11 @@ import { TaskManager } from '../../../components/tasks/TaskManager'
 
 export default function Home() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">All Tasks</h1>
-        <p className="text-gray-600">Manage all your tasks in one place</p>
+    <div>
+      <div className="mb-6">
+        <h1 className="text-xl font-bold mb-1" style={{ color: 'var(--todoist-text)' }}>
+          Inbox
+        </h1>
       </div>
       
       <TaskManager filter="all" />

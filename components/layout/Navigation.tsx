@@ -8,7 +8,7 @@ import { Inbox, Calendar, CheckSquare } from 'lucide-react'
 const navItems = [
   {
     href: '/',
-    label: 'All Tasks',
+    label: 'Inbox',
     icon: Inbox,
   },
   {
@@ -29,33 +29,55 @@ export function Navigation() {
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="hidden md:block w-64 bg-gray-50 border-r border-gray-200 p-4">
-        <div className="space-y-2">
-          {navItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
-            
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={clsx(
-                  'flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors',
-                  isActive
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                )}
-              >
-                <Icon className="h-4 w-4" />
-                {item.label}
-              </Link>
-            )
-          })}
+      <nav 
+        className="hidden md:block w-80 border-r flex-shrink-0" 
+        style={{ 
+          backgroundColor: 'var(--todoist-sidebar)', 
+          borderColor: 'var(--todoist-border)' 
+        }}
+      >
+        <div className="p-6">
+          <div className="space-y-1">
+            {navItems.map((item) => {
+              const Icon = item.icon
+              const isActive = pathname === item.href
+              
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={clsx(
+                    'flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors',
+                    isActive
+                      ? 'font-medium'
+                      : ''
+                  )}
+                  style={{
+                    color: isActive ? 'var(--todoist-red)' : 'var(--todoist-text-light)',
+                    backgroundColor: isActive ? 'var(--todoist-red-light)' : 'transparent'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.backgroundColor = 'var(--todoist-sidebar-hover)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.backgroundColor = 'transparent'
+                    }
+                  }}
+                >
+                  <Icon className="h-4 w-4 flex-shrink-0" />
+                  <span>{item.label}</span>
+                </Link>
+              )
+            })}
+          </div>
         </div>
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden bg-white border-b border-gray-200">
+      <nav className="md:hidden bg-white border-b" style={{ borderColor: 'var(--todoist-border)' }}>
         <div className="flex overflow-x-auto">
           {navItems.map((item) => {
             const Icon = item.icon
@@ -66,11 +88,12 @@ export function Navigation() {
                 key={item.href}
                 href={item.href}
                 className={clsx(
-                  'flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2',
-                  isActive
-                    ? 'text-blue-700 border-blue-700'
-                    : 'text-gray-600 border-transparent hover:text-gray-900'
+                  'flex items-center gap-2 px-4 py-3 text-sm whitespace-nowrap transition-colors border-b-2',
+                  isActive ? 'font-medium border-current' : 'border-transparent'
                 )}
+                style={{
+                  color: isActive ? 'var(--todoist-red)' : 'var(--todoist-text-light)'
+                }}
               >
                 <Icon className="h-4 w-4" />
                 {item.label}

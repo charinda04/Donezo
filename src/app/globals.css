@@ -1,8 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Todoist Colors */
+  --todoist-red: #dc4c3e;
+  --todoist-red-hover: #c53e32;
+  --todoist-red-light: #fef2f2;
+  --todoist-sidebar: #fafafa;
+  --todoist-sidebar-hover: #f3f3f3;
+  --todoist-border: #e5e5e5;
+  --todoist-text: #202020;
+  --todoist-text-light: #666666;
+  --todoist-text-muted: #999999;
+  --todoist-background: #ffffff;
+  --todoist-task-hover: #f9f9f9;
+  --todoist-completed: #808080;
+  
+  /* Priority Colors */
+  --priority-urgent: #dc4c3e;    /* P1 - Red */
+  --priority-high: #eb8500;      /* P2 - Orange */
+  --priority-medium: #246fe0;    /* P3 - Blue */
+  --priority-low: #686868;       /* P4 - Gray */
+  
+  /* Status Colors */
+  --overdue: #d1453b;
+  --today: #dc4c3e;
+  --upcoming: #692fc2;
+  
+  /* UI Elements */
+  --background: var(--todoist-background);
+  --foreground: var(--todoist-text);
 }
 
 @theme inline {
@@ -10,17 +36,24 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  
+  /* Todoist Color System */
+  --color-todoist-red: var(--todoist-red);
+  --color-todoist-red-hover: var(--todoist-red-hover);
+  --color-todoist-sidebar: var(--todoist-sidebar);
+  --color-todoist-border: var(--todoist-border);
+  --color-todoist-text: var(--todoist-text);
+  --color-todoist-text-light: var(--todoist-text-light);
+  --color-todoist-text-muted: var(--todoist-text-muted);
+  --color-overdue: var(--overdue);
+  --color-today: var(--today);
+  --color-upcoming: var(--upcoming);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
 }

@@ -2,8 +2,6 @@
 
 import { useState } from 'react'
 import { Task } from '@prisma/client'
-import { Checkbox } from '../ui/Checkbox'
-import { Button } from '../ui/Button'
 import { Trash2, Edit } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -38,16 +36,40 @@ export function TaskItem({ task, onToggleComplete, onUpdate, onDelete }: TaskIte
     }
   }
 
+  const isOverdue = task.dueDate && new Date(task.dueDate) < new Date() && !task.completed
+  const isToday = task.dueDate && new Date(task.dueDate).toDateString() === new Date().toDateString()
+
   return (
-    <div className={clsx(
-      'group flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors',
-      task.completed && 'opacity-60'
-    )}>
-      <Checkbox
-        checked={task.completed}
-        onChange={() => onToggleComplete(task.id)}
-        className="flex-shrink-0"
-      />
+    <div 
+      className={clsx(
+        'group flex items-start gap-4 py-4 px-5 transition-colors',
+        task.completed && 'opacity-60'
+      )}
+      style={{ 
+        backgroundColor: 'var(--todoist-background)'
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = 'var(--todoist-task-hover)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = 'var(--todoist-background)'
+      }}
+    >
+      {/* Custom Checkbox */}
+      <button
+        onClick={() => onToggleComplete(task.id)}
+        className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
+        style={{
+          borderColor: task.completed ? 'var(--todoist-completed)' : 'var(--todoist-border)',
+          backgroundColor: task.completed ? 'var(--todoist-completed)' : 'transparent'
+        }}
+      >
+        {task.completed && (
+          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+        )}
+      </button>
       
       <div className="flex-1 min-w-0">
         {isEditing ? (
@@ -57,15 +79,19 @@ export function TaskItem({ task, onToggleComplete, onUpdate, onDelete }: TaskIte
             onChange={(e) => setEditContent(e.target.value)}
             onBlur={handleSave}
             onKeyDown={handleKeyDown}
-            className="w-full px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-0 py-0 text-sm border-none outline-none bg-transparent"
+            style={{ color: 'var(--todoist-text)' }}
             autoFocus
           />
         ) : (
           <div
             className={clsx(
-              'cursor-text hover:bg-gray-100 px-2 py-1 rounded',
-              task.completed && 'line-through text-gray-500'
+              'cursor-text text-base leading-relaxed',
+              task.completed && 'line-through'
             )}
+            style={{ 
+              color: task.completed ? 'var(--todoist-completed)' : 'var(--todoist-text)' 
+            }}
             onClick={() => setIsEditing(true)}
           >
             {task.content}
@@ -73,35 +99,37 @@ export function TaskItem({ task, onToggleComplete, onUpdate, onDelete }: TaskIte
         )}
         
         {task.dueDate && (
-          <div className={clsx(
-            'text-xs mt-1 px-2',
-            new Date(task.dueDate) < new Date() && !task.completed 
-              ? 'text-red-600' 
-              : 'text-gray-500'
-          )}>
-            Due: {new Date(task.dueDate).toLocaleDateString()}
+          <div className="flex items-center gap-1 mt-1">
+            <span 
+              className="text-xs font-medium px-2 py-0.5 rounded"
+              style={{
+                color: isOverdue ? 'var(--overdue)' : isToday ? 'var(--today)' : 'var(--todoist-text-muted)',
+                backgroundColor: isOverdue ? '#fef2f2' : isToday ? '#fef2f2' : '#f9f9f9'
+              }}
+            >
+              {new Date(task.dueDate).toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric' 
+              })}
+            </span>
           </div>
         )}
       </div>
 
-      <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button
-          variant="ghost"
-          size="sm"
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <button
           onClick={() => setIsEditing(true)}
-          className="h-8 w-8 p-0"
+          className="p-1.5 rounded-md hover:bg-gray-100 transition-colors"
         >
-          <Edit className="h-4 w-4" />
-        </Button>
+          <Edit className="h-3.5 w-3.5" style={{ color: 'var(--todoist-text-muted)' }} />
+        </button>
         
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
           onClick={() => onDelete(task.id)}
-          className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
+          className="p-1.5 rounded-md hover:bg-red-50 transition-colors"
         >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+          <Trash2 className="h-3.5 w-3.5" style={{ color: 'var(--todoist-text-muted)' }} />
+        </button>
       </div>
     </div>
   )

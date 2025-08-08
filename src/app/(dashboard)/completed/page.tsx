@@ -2,10 +2,11 @@ import { TaskManager } from '../../../../components/tasks/TaskManager'
 
 export default function CompletedPage() {
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Completed</h1>
-        <p className="text-gray-600">Tasks you&apos;ve completed</p>
+    <div>
+      <div className="mb-6">
+        <h1 className="text-xl font-bold mb-1" style={{ color: 'var(--todoist-text)' }}>
+          Completed
+        </h1>
       </div>
       
       <TaskManager filter="completed" />
