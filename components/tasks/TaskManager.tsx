@@ -3,14 +3,13 @@
 import { useCallback, useMemo } from 'react'
 import { TaskForm } from '@/components/tasks/TaskForm'
 import { TaskList } from '@/components/tasks/TaskList'
-import { Modal } from '@/components/ui/Modal'
-import { Button } from '@/components/ui/Button'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { useTaskQuery } from '@/lib/hooks/useTaskQuery'
 import { useTaskMutations } from '@/lib/hooks/useTaskMutations'
 import { useDeleteModal } from '@/lib/hooks/useDeleteModal'
 import { useTaskStore } from '@/lib/stores/useTaskStore'
 import { TaskFilter, EMPTY_MESSAGES } from '@/lib/constants/tasks'
-import { UI_TEXT } from '@/lib/constants/ui'
+import { UI_TEXT, MODAL_TITLES } from '@/lib/constants/ui'
 
 interface TaskManagerProps {
   filter?: TaskFilter
@@ -68,35 +67,16 @@ export function TaskManager({ filter = 'all' }: TaskManagerProps) {
         emptyMessage={emptyMessage}
       />
 
-      {/* Delete confirmation modal */}
-      <Modal
+      {/* Delete confirmation dialog */}
+      <ConfirmDialog
         isOpen={deleteModal.isOpen}
         onClose={deleteModal.handleCloseModal}
-        title={UI_TEXT.DELETE}
-        size="sm"
-      >
-        <div className="space-y-4">
-          <p className="text-gray-600">
-            Are you sure you want to delete &quot;{deleteModal.taskToDelete?.content}&quot;? This action cannot be undone.
-          </p>
-          
-          <div className="flex gap-2 justify-end">
-            <Button
-              variant="secondary"
-              onClick={deleteModal.handleCloseModal}
-            >
-              {UI_TEXT.CANCEL}
-            </Button>
-            <Button
-              variant="danger"
-              onClick={handleConfirmDelete}
-              loading={mutations.deleteTask.isPending}
-            >
-              {UI_TEXT.DELETE}
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        onConfirm={handleConfirmDelete}
+        title={MODAL_TITLES.DELETE_TASK}
+        message={`Are you sure you want to delete "${deleteModal.taskToDelete?.content}"? This action cannot be undone.`}
+        confirmText={UI_TEXT.DELETE}
+        loading={mutations.deleteTask.isPending}
+      />
     </div>
   )
 }
