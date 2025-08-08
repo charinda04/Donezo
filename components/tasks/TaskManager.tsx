@@ -1,13 +1,13 @@
 'use client'
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useTaskStore } from '../../lib/stores/useTaskStore'
-import { useUIStore } from '../../lib/stores/useUIStore'
-import { TaskForm } from './TaskForm'
-import { TaskList } from './TaskList'
-import { Modal } from '../ui/Modal'
-import { Button } from '../ui/Button'
-import { createTask, updateTask, toggleTaskComplete, deleteTask, getTasks } from '../../lib/actions/tasks'
+import { useTaskStore } from '@/lib/stores/useTaskStore'
+import { useUIStore } from '@/lib/stores/useUIStore'
+import { TaskForm } from '@/components/tasks/TaskForm'
+import { TaskList } from '@/components/tasks/TaskList'
+import { Modal } from '@/components/ui/Modal'
+import { Button } from '@/components/ui/Button'
+import { createTask, updateTask, toggleTaskComplete, deleteTask, getTasks } from '@/lib/actions/tasks'
 import { Task } from '@prisma/client'
 
 interface TaskManagerProps {
