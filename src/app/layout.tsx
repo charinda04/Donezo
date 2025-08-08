@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TaskFlow - Your Ultimate Todo Manager",
+  title: "Donezo - Your Ultimate Todo Manager",
   description: "A complete Todoist clone built with Next.js, featuring advanced task management, collaboration, and productivity tracking.",
 };
 

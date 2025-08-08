@@ -12,32 +12,32 @@ datasource db {
 
 // User model for authentication and profile management
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
+  id        String   @id @default(cuid())
+  email     String   @unique
   name      String?
   image     String?
   avatar    String?
-  password  String?   // For credentials auth, null for OAuth users
-  karma     Int       @default(0)
-  timezone  String    @default("UTC")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  password  String? // For credentials auth, null for OAuth users
+  karma     Int      @default(0)
+  timezone  String   @default("UTC")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   // User preferences
   preferences Json @default("{}")
 
   // Relationships
-  accounts        Account[]
-  sessions        Session[]
-  projects        Project[]
-  tasks           Task[]
-  assignedTasks   Task[]            @relation("TaskAssignee")
-  labels          Label[]
-  taskComments    TaskComment[]
-  projectMembers  ProjectMember[]
-  activities      Activity[]
-  reminders       Reminder[]
-  goals           Goal[]
+  accounts       Account[]
+  sessions       Session[]
+  projects       Project[]
+  tasks          Task[]
+  assignedTasks  Task[]          @relation("TaskAssignee")
+  labels         Label[]
+  taskComments   TaskComment[]
+  projectMembers ProjectMember[]
+  activities     Activity[]
+  reminders      Reminder[]
+  goals          Goal[]
 
   @@map("users")
 }
@@ -82,30 +82,30 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-// Core TaskFlow models
+// Core Donezo models
 
 // Project model for organizing tasks
 model Project {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   name        String
   description String?
-  color       String    @default("#808080")
+  color       String   @default("#808080")
   icon        String?
   userId      String
   parentId    String?
-  order       Int       @default(0)
-  isArchived  Boolean   @default(false)
-  isFavorite  Boolean   @default(false)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  order       Int      @default(0)
+  isArchived  Boolean  @default(false)
+  isFavorite  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relationships
-  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  parent       Project?         @relation("ProjectHierarchy", fields: [parentId], references: [id])
-  children     Project[]        @relation("ProjectHierarchy")
-  tasks        Task[]
-  sections     Section[]
-  members      ProjectMember[]
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent   Project?        @relation("ProjectHierarchy", fields: [parentId], references: [id])
+  children Project[]       @relation("ProjectHierarchy")
+  tasks    Task[]
+  sections Section[]
+  members  ProjectMember[]
 
   @@index([userId])
   @@index([parentId])
@@ -124,22 +124,22 @@ model Task {
   projectId   String?
   userId      String
   assigneeId  String?
-  parentId    String?   // For subtasks
+  parentId    String? // For subtasks
   sectionId   String?
   order       Int       @default(0)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   // Relationships
-  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  assignee   User?         @relation("TaskAssignee", fields: [assigneeId], references: [id])
-  project    Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
-  parent     Task?         @relation("TaskHierarchy", fields: [parentId], references: [id])
-  subtasks   Task[]        @relation("TaskHierarchy")
-  section    Section?      @relation(fields: [sectionId], references: [id])
-  comments   TaskComment[]
-  labels     TaskLabel[]
-  reminders  Reminder[]
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignee  User?         @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  project   Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  parent    Task?         @relation("TaskHierarchy", fields: [parentId], references: [id])
+  subtasks  Task[]        @relation("TaskHierarchy")
+  section   Section?      @relation(fields: [sectionId], references: [id])
+  comments  TaskComment[]
+  labels    TaskLabel[]
+  reminders Reminder[]
 
   @@index([userId])
   @@index([projectId])
@@ -195,11 +195,11 @@ model Section {
 
 // Project collaboration
 model ProjectMember {
-  id        String          @id @default(cuid())
+  id        String      @id @default(cuid())
   projectId String
   userId    String
-  role      ProjectRole     @default(MEMBER)
-  joinedAt  DateTime        @default(now())
+  role      ProjectRole @default(MEMBER)
+  joinedAt  DateTime    @default(now())
 
   // Relationships
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -228,13 +228,13 @@ model TaskComment {
 
 // Activity log for audit trail
 model Activity {
-  id         String      @id @default(cuid())
+  id         String     @id @default(cuid())
   userId     String
   action     ActionType
   entityType EntityType
   entityId   String
-  metadata   Json        @default("{}")
-  createdAt  DateTime    @default(now())
+  metadata   Json       @default("{}")
+  createdAt  DateTime   @default(now())
 
   // Relationships
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -246,13 +246,13 @@ model Activity {
 
 // Reminders for tasks
 model Reminder {
-  id        String        @id @default(cuid())
+  id        String       @id @default(cuid())
   taskId    String
   userId    String
-  type      ReminderType  @default(RELATIVE)
-  value     String        // JSON string for flexible reminder data
-  isActive  Boolean       @default(true)
-  createdAt DateTime      @default(now())
+  type      ReminderType @default(RELATIVE)
+  value     String // JSON string for flexible reminder data
+  isActive  Boolean      @default(true)
+  createdAt DateTime     @default(now())
 
   // Relationships
   task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
@@ -264,17 +264,17 @@ model Reminder {
 
 // Goals for productivity tracking
 model Goal {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   userId      String
   title       String
   description String?
-  target      Int       // Target number (tasks, karma, etc.)
-  current     Int       @default(0)
-  type        GoalType  @default(TASKS_COMPLETED)
-  period      String    // daily, weekly, monthly
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  target      Int // Target number (tasks, karma, etc.)
+  current     Int      @default(0)
+  type        GoalType @default(TASKS_COMPLETED)
+  period      String // daily, weekly, monthly
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   // Relationships
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -286,10 +286,10 @@ model Goal {
 // Enums
 enum Priority {
   NONE
-  LOW     // p4
-  MEDIUM  // p3
-  HIGH    // p2
-  URGENT  // p1
+  LOW // p4
+  MEDIUM // p3
+  HIGH // p2
+  URGENT // p1
 }
 
 enum ProjectRole {
@@ -317,9 +317,9 @@ enum EntityType {
 }
 
 enum ReminderType {
-  RELATIVE  // X minutes before due date
-  ABSOLUTE  // Specific date/time
-  LOCATION  // Location-based (future feature)
+  RELATIVE // X minutes before due date
+  ABSOLUTE // Specific date/time
+  LOCATION // Location-based (future feature)
 }
 
 enum GoalType {
