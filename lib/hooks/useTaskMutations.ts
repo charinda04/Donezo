@@ -8,7 +8,7 @@ import { TASK_MESSAGES } from '@/lib/constants/tasks'
 
 export function useTaskMutations() {
   const queryClient = useQueryClient()
-  const { addTask, updateTask: updateTaskInStore, removeTask, tasks } = useTaskStore()
+  const { addOptimisticTask, updateOptimisticTask, removeOptimisticTask, optimisticTasks } = useTaskStore()
   const { showToast, closeDeleteModal } = useUIStore()
 
   const createTaskMutation = useMutation({
@@ -38,7 +38,7 @@ export function useTaskMutations() {
         createdAt: new Date(),
         updatedAt: new Date(),
       }
-      addTask(tempTask)
+      addOptimisticTask(tempTask)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: taskKeys.all })
@@ -59,7 +59,7 @@ export function useTaskMutations() {
       return result.task
     },
     onMutate: async ({ taskId, content }) => {
-      updateTaskInStore(taskId, { content })
+      updateOptimisticTask(taskId, { content })
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: taskKeys.all })
@@ -80,9 +80,9 @@ export function useTaskMutations() {
       return result.task
     },
     onMutate: async (taskId) => {
-      const task = tasks.find(t => t.id === taskId)
+      const task = optimisticTasks.find(t => t.id === taskId)
       if (task) {
-        updateTaskInStore(taskId, { 
+        updateOptimisticTask(taskId, { 
           completed: !task.completed,
           completedAt: !task.completed ? new Date() : null
         })
@@ -105,7 +105,7 @@ export function useTaskMutations() {
       }
     },
     onMutate: async (taskId) => {
-      removeTask(taskId)
+      removeOptimisticTask(taskId)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: taskKeys.all })

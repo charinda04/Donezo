@@ -1,15 +1,13 @@
 import { useUIStore } from '@/lib/stores/useUIStore'
-import { useTaskStore } from '@/lib/stores/useTaskStore'
+import { Task } from '@prisma/client'
 
-export function useDeleteModal() {
+export function useDeleteModal(tasks: Task[] = []) {
   const { 
     isDeleteModalOpen, 
     deleteModalTaskId, 
     closeDeleteModal, 
     openDeleteModal 
   } = useUIStore()
-  
-  const { tasks } = useTaskStore()
 
   const taskToDelete = tasks.find(t => t.id === deleteModalTaskId)
 

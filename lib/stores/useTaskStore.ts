@@ -1,53 +1,57 @@
 import { create } from 'zustand'
 import { Task } from '@prisma/client'
+import { TaskFilter } from '@/lib/constants/tasks'
 
 interface TaskStore {
-  // State
-  tasks: Task[]
+  // State - only temporary/optimistic update state
+  optimisticTasks: Task[]
   selectedTaskId: string | null
-  filter: 'all' | 'today' | 'completed'
+  filter: TaskFilter
   searchQuery: string
   
   // Actions
-  setTasks: (tasks: Task[]) => void
-  addTask: (task: Task) => void
-  updateTask: (taskId: string, updates: Partial<Task>) => void
-  removeTask: (taskId: string) => void
+  setOptimisticTasks: (tasks: Task[]) => void
+  addOptimisticTask: (task: Task) => void
+  updateOptimisticTask: (taskId: string, updates: Partial<Task>) => void
+  removeOptimisticTask: (taskId: string) => void
+  clearOptimisticTasks: () => void
   setSelectedTaskId: (taskId: string | null) => void
-  setFilter: (filter: 'all' | 'today' | 'completed') => void
+  setFilter: (filter: TaskFilter) => void
   setSearchQuery: (query: string) => void
   
-  // Computed
-  filteredTasks: () => Task[]
+  // Computed - now takes tasks as parameter from TanStack Query
+  getFilteredTasks: (tasks: Task[]) => Task[]
 }
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
-  // Initial state
-  tasks: [],
+  // Initial state - only optimistic/UI state
+  optimisticTasks: [],
   selectedTaskId: null,
   filter: 'all',
   searchQuery: '',
   
   // Actions
-  setTasks: (tasks) => set({ tasks }),
+  setOptimisticTasks: (tasks) => set({ optimisticTasks: tasks }),
   
-  addTask: (task) =>
+  addOptimisticTask: (task) =>
     set((state) => ({
-      tasks: [task, ...state.tasks],
+      optimisticTasks: [task, ...state.optimisticTasks],
     })),
   
-  updateTask: (taskId, updates) =>
+  updateOptimisticTask: (taskId, updates) =>
     set((state) => ({
-      tasks: state.tasks.map((task) =>
+      optimisticTasks: state.optimisticTasks.map((task) =>
         task.id === taskId ? { ...task, ...updates } : task
       ),
     })),
   
-  removeTask: (taskId) =>
+  removeOptimisticTask: (taskId) =>
     set((state) => ({
-      tasks: state.tasks.filter((task) => task.id !== taskId),
+      optimisticTasks: state.optimisticTasks.filter((task) => task.id !== taskId),
       selectedTaskId: state.selectedTaskId === taskId ? null : state.selectedTaskId,
     })),
+
+  clearOptimisticTasks: () => set({ optimisticTasks: [] }),
   
   setSelectedTaskId: (taskId) => set({ selectedTaskId: taskId }),
   
@@ -55,9 +59,9 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   
   setSearchQuery: (query) => set({ searchQuery: query }),
   
-  // Computed
-  filteredTasks: () => {
-    const { tasks, filter, searchQuery } = get()
+  // Computed - now works with tasks from TanStack Query
+  getFilteredTasks: (tasks: Task[]) => {
+    const { filter, searchQuery } = get()
     
     let filtered = tasks
     

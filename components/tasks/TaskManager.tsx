@@ -17,10 +17,12 @@ interface TaskManagerProps {
 
 export function TaskManager({ filter = 'all' }: TaskManagerProps) {
   // Custom hooks
-  const { isLoading } = useTaskQuery(filter)
+  const { data: tasks = [], isLoading } = useTaskQuery(filter)
   const mutations = useTaskMutations()
-  const deleteModal = useDeleteModal()
-  const { filteredTasks } = useTaskStore()
+  const deleteModal = useDeleteModal(tasks)
+  const { getFilteredTasks } = useTaskStore()
+  
+  const filteredTasks = getFilteredTasks(tasks)
 
   // Event handlers
   const handleCreateTask = (content: string, dueDate?: Date) => {
@@ -57,7 +59,7 @@ export function TaskManager({ filter = 'all' }: TaskManagerProps) {
       />
       
       <TaskList
-        tasks={filteredTasks()}
+        tasks={filteredTasks}
         loading={isLoading}
         onToggleComplete={handleToggleComplete}
         onUpdate={handleUpdateTask}
