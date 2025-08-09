@@ -16,8 +16,8 @@ export function AppLayout({ children }: AppLayoutProps) {
       
       <div className="flex flex-1 overflow-hidden">
         <Navigation />
-        <main className="flex-1 overflow-auto">
-          <div className="p-6 max-w-5xl">
+        <main className="flex-1 overflow-auto pb-20 md:pb-0">
+          <div className="p-4 sm:p-6 lg:p-8 max-w-none sm:max-w-5xl mx-auto">
             {children}
           </div>
         </main>

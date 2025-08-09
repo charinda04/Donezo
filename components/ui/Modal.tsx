@@ -28,26 +28,26 @@ export function Modal({ isOpen, onClose, children, title, size = 'md' }: ModalPr
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black bg-opacity-50"
       onClick={onClose}
     >
       <div
         className={clsx(
-          'bg-white rounded-lg shadow-xl w-full max-h-[90vh] overflow-y-auto',
+          'bg-white rounded-t-lg sm:rounded-lg shadow-xl w-full max-h-[90vh] overflow-y-auto',
           {
-            'max-w-sm': size === 'sm',
-            'max-w-md': size === 'md',
-            'max-w-lg': size === 'lg',
+            'sm:max-w-sm': size === 'sm',
+            'sm:max-w-md': size === 'md',
+            'sm:max-w-lg': size === 'lg',
           }
         )}
         onClick={(e) => e.stopPropagation()}
       >
         {title && (
-          <div className="px-6 py-4 border-b border-gray-200">
+          <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
             <h3 className="text-lg font-medium text-gray-900">{title}</h3>
           </div>
         )}
-        <div className="px-6 py-4">
+        <div className="px-4 sm:px-6 py-4 pb-6 sm:pb-4">
           {children}
         </div>
       </div>

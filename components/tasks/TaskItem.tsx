@@ -57,7 +57,7 @@ function TaskItemComponent({ task, onToggleComplete, onUpdate, onDelete }: TaskI
   return (
     <div 
       className={clsx(
-        'group flex items-start gap-4 py-4 px-5 transition-colors',
+        'group flex items-start gap-3 sm:gap-4 py-4 px-4 sm:px-5 transition-colors min-h-[64px]',
         task.completed && 'opacity-60'
       )}
       style={{ 
@@ -73,17 +73,22 @@ function TaskItemComponent({ task, onToggleComplete, onUpdate, onDelete }: TaskI
       {/* Custom Checkbox */}
       <button
         onClick={handleToggleClick}
-        className="flex-shrink-0 mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
-        style={{
-          borderColor: task.completed ? 'var(--todoist-completed)' : 'var(--todoist-border)',
-          backgroundColor: task.completed ? 'var(--todoist-completed)' : 'transparent'
-        }}
+        className="flex-shrink-0 mt-0.5 p-2 -m-2 rounded-full transition-colors touch-manipulation"
+        aria-label={task.completed ? 'Mark as incomplete' : 'Mark as complete'}
       >
-        {task.completed && (
-          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-          </svg>
-        )}
+        <div 
+          className="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors"
+          style={{
+            borderColor: task.completed ? 'var(--todoist-completed)' : 'var(--todoist-border)',
+            backgroundColor: task.completed ? 'var(--todoist-completed)' : 'transparent'
+          }}
+        >
+          {task.completed && (
+            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+          )}
+        </div>
       </button>
       
       <div className="flex-1 min-w-0">
@@ -131,19 +136,21 @@ function TaskItemComponent({ task, onToggleComplete, onUpdate, onDelete }: TaskI
         )}
       </div>
 
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
         <button
           onClick={handleEditClick}
-          className="p-1.5 rounded-md hover:bg-gray-100 transition-colors"
+          className="p-2 sm:p-1.5 rounded-md hover:bg-gray-100 transition-colors touch-manipulation min-h-[44px] sm:min-h-0 flex items-center justify-center"
+          aria-label="Edit task"
         >
-          <Edit className="h-3.5 w-3.5" style={{ color: 'var(--todoist-text-muted)' }} />
+          <Edit className="h-4 w-4 sm:h-3.5 sm:w-3.5" style={{ color: 'var(--todoist-text-muted)' }} />
         </button>
         
         <button
           onClick={handleDeleteClick}
-          className="p-1.5 rounded-md hover:bg-red-50 transition-colors"
+          className="p-2 sm:p-1.5 rounded-md hover:bg-red-50 transition-colors touch-manipulation min-h-[44px] sm:min-h-0 flex items-center justify-center"
+          aria-label="Delete task"
         >
-          <Trash2 className="h-3.5 w-3.5" style={{ color: 'var(--todoist-text-muted)' }} />
+          <Trash2 className="h-4 w-4 sm:h-3.5 sm:w-3.5" style={{ color: 'var(--todoist-text-muted)' }} />
         </button>
       </div>
     </div>

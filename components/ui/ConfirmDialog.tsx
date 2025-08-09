@@ -50,11 +50,12 @@ function ConfirmDialogComponent({
           {typeof message === 'string' ? <p>{message}</p> : message}
         </div>
         
-        <div className="flex gap-2 justify-end">
+        <div className="flex flex-col sm:flex-row gap-2 sm:justify-end">
           <Button
             variant="secondary"
             onClick={handleCancel}
             disabled={loading}
+            className="w-full sm:w-auto min-h-[44px] touch-manipulation"
           >
             {cancelText}
           </Button>
@@ -62,6 +63,7 @@ function ConfirmDialogComponent({
             variant={confirmVariant}
             onClick={handleConfirm}
             loading={loading}
+            className="w-full sm:w-auto min-h-[44px] touch-manipulation"
           >
             {confirmText}
           </Button>
