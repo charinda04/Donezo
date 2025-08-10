@@ -41,12 +41,12 @@ export function useTaskMutations() {
       addOptimisticTask(tempTask)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: taskKeys.all })
+      queryClient.invalidateQueries({ queryKey: taskKeys.all() })
       showToast(TASK_MESSAGES.CREATE_SUCCESS, 'success')
     },
     onError: (error) => {
       showToast(error.message, 'error')
-      queryClient.invalidateQueries({ queryKey: taskKeys.all })
+      queryClient.invalidateQueries({ queryKey: taskKeys.all() })
     },
   })
 
@@ -62,12 +62,12 @@ export function useTaskMutations() {
       updateOptimisticTask(taskId, { content })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: taskKeys.all })
+      queryClient.invalidateQueries({ queryKey: taskKeys.all() })
       showToast(TASK_MESSAGES.UPDATE_SUCCESS, 'success')
     },
     onError: (error) => {
       showToast(error.message, 'error')
-      queryClient.invalidateQueries({ queryKey: taskKeys.all })
+      queryClient.invalidateQueries({ queryKey: taskKeys.all() })
     },
   })
 
@@ -89,11 +89,11 @@ export function useTaskMutations() {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: taskKeys.all })
+      queryClient.invalidateQueries({ queryKey: taskKeys.all() })
     },
     onError: (error) => {
       showToast(error.message, 'error')
-      queryClient.invalidateQueries({ queryKey: taskKeys.all })
+      queryClient.invalidateQueries({ queryKey: taskKeys.all() })
     },
   })
 
@@ -108,13 +108,13 @@ export function useTaskMutations() {
       removeOptimisticTask(taskId)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: taskKeys.all })
+      queryClient.invalidateQueries({ queryKey: taskKeys.all() })
       showToast(TASK_MESSAGES.DELETE_SUCCESS, 'success')
       closeDeleteModal()
     },
     onError: (error) => {
       showToast(error.message, 'error')
-      queryClient.invalidateQueries({ queryKey: taskKeys.all })
+      queryClient.invalidateQueries({ queryKey: taskKeys.all() })
     },
   })
 

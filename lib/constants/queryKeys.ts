@@ -7,11 +7,11 @@ export const QUERY_KEYS = {
 } as const
 
 export const taskKeys = {
-  all: [QUERY_KEYS.TASKS] as const,
-  lists: () => [...taskKeys.all, 'list'] as const,
+  all: () => [QUERY_KEYS.TASKS] as const,
+  lists: () => [...taskKeys.all(), 'list'] as const,
   list: (filter: TaskFilter) => [...taskKeys.lists(), filter] as const,
-  details: () => [...taskKeys.all, 'detail'] as const,
+  details: () => [...taskKeys.all(), 'detail'] as const,
   detail: (id: string) => [...taskKeys.details(), id] as const,
 }
 
-export type TaskKeys = ReturnType<typeof taskKeys[keyof typeof taskKeys]>
+export type TaskKeys = ReturnType<(typeof taskKeys)[keyof typeof taskKeys]>
