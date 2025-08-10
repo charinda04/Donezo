@@ -1,4 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Donezo
+
+A comprehensive Todoist clone built with Next.js 15, featuring advanced task management, collaboration, and productivity tracking.
+
+## Overview
+
+Donezo is a full-stack TypeScript application that replicates and extends Todoist's functionality with modern web technologies. Built using the Server Actions + TanStack Query architecture pattern for optimal performance and user experience.
+
+## Key Features
+
+- **Task Management**: Create, organize, and track tasks with priority levels, due dates, and labels
+- **Project Organization**: Group tasks into projects with custom sections and hierarchies
+- **Collaboration**: Share projects, assign tasks, and leave comments with team members
+- **Productivity Tracking**: Karma system and activity logs to monitor progress
+- **Real-time Updates**: Optimistic updates with proper rollback handling
+- **Responsive Design**: Works seamlessly across desktop and mobile devices
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router and TypeScript
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js with multiple providers
+- **State Management**: Zustand for client-side state
+- **Data Fetching**: TanStack Query for server state management
+- **Styling**: Tailwind CSS v4 with custom theming
+- **UI Components**: Radix UI primitives with custom components
+- **Build**: Turbopack for development
+- **Icons**: Lucide React for consistent iconography
 
 ## Getting Started
 
@@ -6,31 +33,70 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Development Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start development server with Turbopack (localhost:3000)
+- `npm run build` - Build production bundle
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint checks
 
-## Learn More
+## TODO List
 
-To learn more about Next.js, take a look at the following resources:
+### Core Features
+- [ ] User Authentication & Registration
+- [ ] Task CRUD Operations
+- [ ] Project Management
+- [ ] Task Hierarchy & Sections
+- [ ] Due Dates & Reminders
+- [ ] Labels & Filters
+- [ ] Task Comments
+- [ ] File Attachments
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Collaboration
+- [ ] Project Sharing
+- [ ] Team Member Invitations
+- [ ] Task Assignment
+- [ ] Activity Feed
+- [ ] Real-time Notifications
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Advanced Features
+- [ ] Karma System
+- [ ] Productivity Analytics
+- [ ] Custom Templates
+- [ ] Bulk Operations
+- [ ] Keyboard Shortcuts
+- [ ] Offline Support
+- [ ] Mobile App (React Native)
 
-## Deploy on Vercel
+### Infrastructure
+- [ ] Email Notifications
+- [ ] Data Export/Import
+- [ ] API Documentation
+- [ ] Performance Optimization
+- [ ] Security Audit
+- [ ] Deployment Pipeline
+- [ ] Monitoring & Analytics
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Architecture
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The application follows the Server Actions + TanStack Query pattern:
+- **80% Server Actions**: Type-safe CRUD operations with built-in CSRF protection
+- **20% API Routes**: Complex operations, file uploads, external integrations
+- **Optimistic Updates**: Immediate UI feedback with proper rollback handling
+- **State Management**: Zustand stores for UI state, TanStack Query for server state
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
+
+## License
+
+MIT
